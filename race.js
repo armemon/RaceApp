@@ -186,7 +186,7 @@ else {
 function Time() {
     now = new Date().getTime();
     if (raceStartTime) {
-        time = (now - raceStartTime);
+        time = (now - raceStartTime)*10;
     }
     else {
         time = 0
@@ -399,7 +399,7 @@ function fRunner() {
     ctx.fillText("1", (parseInt(cell[firstRunner]['x']) + xoffset) / zoomFactor - 4, 580 - (parseInt(cell[firstRunner]['y']) + yoffset) / zoomFactor + 4);
 }
 
-const render1 = setInterval(fRunner, 7470)
+const render1 = setInterval(fRunner, 747)
 function millisToMinutesAndSeconds(millis) {
     var minutes = Math.floor(millis / 60000);
     var seconds = ((millis % 60000) / 1000).toFixed(0);
@@ -421,12 +421,12 @@ function TimerFunction() {
         document.getElementById("thanExpected").innerHTML = ""
         time = reader3_Timings[participants.length - 2];
         document.getElementById("time").innerHTML = millisToMinutesAndSeconds(time);
-        distance = raceInfo[3]["Distance"] * (time / 60000) / raceInfo[3]["ExpectedTime"]
+        distance = 5
         document.getElementById("distance").innerHTML = distance.toFixed(2);
         document.getElementById("tDistance").innerHTML = raceInfo[3]["Distance"] + "km";
         console.log(time)
     }
-    else {
+    if(time) {
         // Get today's date and time
         // now = new Date().getTime();
         // // now = new Date("December 19, 2021 9:00:20").getTime();
