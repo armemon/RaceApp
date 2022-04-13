@@ -181,7 +181,7 @@ if (window.sessionStorage.getItem("raceStartTime")) {
     document.getElementById("button").setAttribute("class", "hidden");
 }
 else {
-    document.getElementById("time").innerHTML="Race is Not Started"
+    document.getElementById("time").innerHTML = "Race is Not Started"
 }
 function Time() {
     now = new Date().getTime();
@@ -282,21 +282,24 @@ function fRunner() {
     // console.log(time)
     // console.log(reader3_Timings[1])
     if (raceStartTime) {
-        if (firstRunner < y + 10) {
-            firstRunner += 10;
+        if (firstRunner < y + 9) {
+            if (time < reader1_Timings[0]) {
+                firstRunner += 10;
+            }
             if (time >= reader1_Timings[0]) {
                 firstRunner = y
                 // console.log("hello")
             }
         }
-        if (firstRunner < 2 * y + 10 && time >= reader1_Timings[0]) {
-            firstRunner += 10;
-            // console.log("bye")
+        if (firstRunner < 2 * y + 9 && time >= reader1_Timings[0]) {
+            if (time < reader2_Timings[0]) {
+                firstRunner += 10;
+            }
             if (time >= reader2_Timings[0]) {
                 firstRunner = 2 * y
-                // console.log("hi")
             }
         }
+        
         if ((firstRunner <= 3 * y - 10) && time >= reader2_Timings[0]) {
             firstRunner += 10;
         }
@@ -313,13 +316,14 @@ function fRunner() {
             }
         }
         if (secondRunner <= 2 * y && time >= reader1_Timings[1]) {
-            secondRunner = Math.floor(firstRunner - (runnerdelays[1] / time1Coordinate));
+            secondRunner +=9
+            console.log(Math.floor(runnerdelays[1] / time1Coordinate));
             if (time >= reader2_Timings[1]) {
                 secondRunner = 2 * y
             }
         }
         if ((secondRunner <= 3 * y - 10) && time >= reader2_Timings[1]) {
-            secondRunner = Math.floor(firstRunner - (runnerdelays[1] / time1Coordinate));
+            secondRunner +=9
         }
         if (time >= reader3_Timings[1]) {
             secondRunner = 2411
@@ -332,13 +336,13 @@ function fRunner() {
             }
         }
         if (thirdRunner <= 2 * y - 20 && time >= reader1_Timings[2]) {
-            thirdRunner = Math.floor(firstRunner - (runnerdelays[2] / time1Coordinate));
+            thirdRunner +=8
             if (time >= reader2_Timings[2]) {
                 thirdRunner = 2 * y
             }
         }
         if ((thirdRunner <= 3 * y - 10) && time >= reader2_Timings[2]) {
-            thirdRunner = Math.floor(firstRunner - (runnerdelays[2] / time1Coordinate));
+            thirdRunner +=8
         }
         if (time >= reader3_Timings[2]) {
             thirdRunner = 2411
@@ -416,11 +420,11 @@ function TimerFunction() {
         document.getElementById("expected").innerHTML = "Race Finished";
         document.getElementById("thanExpected").innerHTML = ""
         time = reader3_Timings[participants.length - 2];
-        distance = raceInfo[3]["Distance"] * (time / 60000) / raceInfo[3]["ExpectedTime"]
         document.getElementById("time").innerHTML = millisToMinutesAndSeconds(time);
+        distance = raceInfo[3]["Distance"] * (time / 60000) / raceInfo[3]["ExpectedTime"]
         document.getElementById("distance").innerHTML = distance.toFixed(2);
         document.getElementById("tDistance").innerHTML = raceInfo[3]["Distance"] + "km";
-        // console.log(time)
+        console.log(time)
     }
     else {
         // Get today's date and time
@@ -456,7 +460,12 @@ function TimerFunction() {
             document.getElementById("expected").innerHTML = (sign ? "+" : "-") + expectedTime;
             document.getElementById("thanExpected").innerHTML = "THAN EXPECTED"
         }
-        distance = raceInfo[3]["Distance"] * (time / 60000) / raceInfo[3]["ExpectedTime"]
+        if (time > reader3_Timings[0]) {
+            distance = 5
+        }
+        else{
+            distance = raceInfo[3]["Distance"] * (time / 60000) / raceInfo[3]["ExpectedTime"]
+        }
         document.getElementById("distance").innerHTML = distance.toFixed(2);
         document.getElementById("tDistance").innerHTML = raceInfo[3]["Distance"] + "km";
         // console.log(reader3_Timings[participants.length - 1])

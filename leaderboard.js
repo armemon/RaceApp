@@ -269,60 +269,69 @@ function fRunner() {
         finish3 = 0
     }
     if (raceStartTime) {
-        if (firstRunner < y + 20) {
-            firstRunner += 10;
-            if (time >= reader1_Timings[1]) {
-                firstRunner = y + 20
+        if (firstRunner < y + 9) {
+            if (time < reader1_Timings[0]) {
+                firstRunner += 10;
+            }
+            if (time >= reader1_Timings[0]) {
+                firstRunner = y
+                // console.log("hello")
             }
         }
-        if (firstRunner < 2 * y + 20 && time >= reader1_Timings[1]) {
-            firstRunner += 10;
-            if (time >= reader2_Timings[1]) {
-                firstRunner = 2 * y + 20
+        if (firstRunner < 2 * y + 9 && time >= reader1_Timings[0]) {
+            if (time < reader2_Timings[0]) {
+                firstRunner += 10;
+            }
+            if (time >= reader2_Timings[0]) {
+                firstRunner = 2 * y
             }
         }
-        if ((firstRunner <= 3 * y - 10) && time >= reader2_Timings[1]) {
+        
+        if ((firstRunner <= 3 * y - 10) && time >= reader2_Timings[0]) {
             firstRunner += 10;
         }
-        if (time >= reader3_Timings[1]) {
+        if (time >= reader3_Timings[0]) {
             firstRunner = 2411
+            // console.log(time)
+            // console.log(reader3_Timings)
         }
 
         if (secondRunner <= y) {
             secondRunner += 9
-            if (time >= reader1_Timings[2]) {
+            if (time >= reader1_Timings[1]) {
                 secondRunner = y
             }
         }
-        if (secondRunner <= 2 * y && time >= reader1_Timings[2]) {
-            secondRunner = Math.floor(firstRunner - (runnerdelays[1] / time1Coordinate));
-            if (time >= reader2_Timings[2]) {
+        if (secondRunner <= 2 * y && time >= reader1_Timings[1]) {
+            secondRunner +=9
+            console.log(Math.floor(runnerdelays[1] / time1Coordinate));
+            if (time >= reader2_Timings[1]) {
                 secondRunner = 2 * y
             }
         }
-        if ((secondRunner <= 3 * y - 10) && time >= reader2_Timings[2]) {
-            secondRunner = Math.floor(firstRunner - (runnerdelays[1] / time1Coordinate));
+        if ((secondRunner <= 3 * y - 10) && time >= reader2_Timings[1]) {
+            secondRunner +=9
         }
-        if (time >= reader3_Timings[2]) {
+        if (time >= reader3_Timings[1]) {
             secondRunner = 2411
             finish2 = 30
         }
         if (thirdRunner <= y - 20) {
             thirdRunner += 8
-            if (time >= reader1_Timings[3]) {
+            if (time >= reader1_Timings[2]) {
                 thirdRunner = y
             }
         }
-        if (thirdRunner <= 2 * y - 20 && time >= reader1_Timings[3]) {
-            thirdRunner = Math.floor(firstRunner - (runnerdelays[2] / time1Coordinate));
-            if (time >= reader2_Timings[3]) {
-                thirdRunner = 2 * y - 20
+        if (thirdRunner <= 2 * y - 20 && time >= reader1_Timings[2]) {
+            thirdRunner +=8
+            if (time >= reader2_Timings[2]) {
+                thirdRunner = 2 * y
             }
         }
-        if ((thirdRunner <= 3 * y - 10) && time >= reader2_Timings[3]) {
-            thirdRunner = Math.floor(firstRunner - (runnerdelays[2] / time1Coordinate));
+        if ((thirdRunner <= 3 * y - 10) && time >= reader2_Timings[2]) {
+            thirdRunner +=8
         }
-        if (time >= reader3_Timings[3]) {
+        if (time >= reader3_Timings[2]) {
             thirdRunner = 2411
             finish3 = -30
         }
