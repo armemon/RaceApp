@@ -182,6 +182,18 @@ if (window.sessionStorage.getItem("raceStartTime")) {
 else {
     document.getElementById("time").innerHTML="Race is Not Started"
 }
+function Time() {
+    now = new Date().getTime();
+    if (raceStartTime) {
+        time = (now - raceStartTime) + 60000 * 9;
+    }
+    else {
+        time = 0
+    }
+}
+var Timer = setInterval(Time,
+    1000);
+Time()
 
 
 var finish2 = 0
@@ -399,6 +411,7 @@ function TimerFunction() {
     if (time >= reader3_Timings[participants.length - 2]) { //change this
         clearInterval(render1)
         clearInterval(Timer);
+        clearInterval(Timer1);
         document.getElementById("expected").innerHTML = "Race Finished";
         document.getElementById("thanExpected").innerHTML = ""
         time = reader3_Timings[participants.length - 2];
@@ -410,13 +423,13 @@ function TimerFunction() {
     }
     else {
         // Get today's date and time
-        now = new Date().getTime();
-        // now = new Date("December 19, 2021 9:00:20").getTime();
+        // now = new Date().getTime();
+        // // now = new Date("December 19, 2021 9:00:20").getTime();
 
-        if (raceStartTime) {
-            document.getElementById("button").disabled = true
-            time = (now - raceStartTime);
-        }
+        // if (raceStartTime) {
+        //     document.getElementById("button").disabled = true
+        //     time = (now - raceStartTime);
+        // }
         var expected;
         var sign = false;
         if (time >= reader3_Timings[1]) {
@@ -453,5 +466,5 @@ function TimerFunction() {
     }
     // console.log(time)
 }
-var Timer = setInterval(TimerFunction, 500);
+var Timer1 = setInterval(TimerFunction, 500);
 fRunner()

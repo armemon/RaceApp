@@ -28,6 +28,18 @@ if (window.sessionStorage.getItem("raceStartTime")) {
         ("raceStartTime")
     document.getElementById("button").setAttribute("class", "hidden");
 }
+function Time() {
+    now = new Date().getTime();
+    if (raceStartTime) {
+        time = (now - raceStartTime) + 60000 * 24;
+    }
+    else {
+        time = 0
+    }
+}
+var Timer = setInterval(Time,
+    1000);
+Time()
 
 function getFirebaseDataon() {
     firebase.database().ref('Data/03_Inbox').on('value', function (data) {
@@ -72,11 +84,12 @@ function getFirebaseDataon() {
     });
 }
 function firstRunner() {
+
     var reader1_Timings = []
     var reader3_Timings = []
     var reader2_Timings = []
-    
-    readerPositions = []
+
+    var readerPositions = []
     pName = []
     pClub = []
     arduino0 = parseInt(reader0[0].slice(22)) * 1000 + parseInt(reader0[0].slice(36))
@@ -99,7 +112,7 @@ function firstRunner() {
         let t = reader2Inbox[i].slice(21, 31)
         let ms = Number(t.split(':')[0]) * 60 * 60 * 1000 + Number(t.split(':')[1]) * 60 * 1000 + Number(t.split(':')[2]) * 1000 + Number(t.split(':')[3]) - arduino3 + arduino2;
         reader2_Timings.push(ms);
-        if (time > reader2_Timings[i-1]) {
+        if (time > reader2_Timings[i - 1]) {
             readerPositions.push(parseInt(reader2Inbox[i].slice(-2)))
         }
         // console.log(reader1Inbox[i])
@@ -107,114 +120,113 @@ function firstRunner() {
 
     arduino1 = parseInt(reader1Inbox[0].slice(22)) * 1000 + parseInt(reader1Inbox[0].slice(36))
     reader1sync = arduino1 + new Date("Mar 31, 1900").getTime();
-    for (p = 1; p <= reader1Inbox.length - 1; p++) {
-        let t = reader1Inbox[p].slice(21, 32)
+    for (i = 1; i <= reader1Inbox.length - 1; i++) {
+        let t = reader1Inbox[i].slice(21, 32)
         let ms = Number(t.split(':')[0]) * 60 * 60 * 1000 + Number(t.split(':')[1]) * 60 * 1000 + Number(t.split(':')[2]) * 1000 + Number(t.split(':')[3]) - arduino3 + arduino1;
         reader1_Timings.push(ms);
-        if (time >= reader1_Timings[i-1]) {
+        // console.log(time)
+        // console.log(reader1_Timings[])
+        if (time > reader1_Timings[i - 1]) {
+            console.log("reader1")
             readerPositions.push(parseInt(reader1Inbox[i].slice(-2)))
         }
         // console.log(reader1Inbox[i])
     }
-
-    for (i = 1; i < participants.length; i++) {
-        readerPositions.push(i)
-    }
-    let uniquePositions = [];
-    readerPositions.forEach((c) => {
-        if (!uniquePositions.includes(c)) {
-            uniquePositions.push(c);
-            pName.push(participants[c]["Name"] + " " + participants[c]["Surname"])
-            pClub.push(participants[c]["Club"])
+    if (reader1_Timings[0]) {
+        console.log(reader1_Timings[0])
+        for (i = 1; i < participants.length; i++) {
+            readerPositions.push(i)
         }
-    }
-    )
-    console.log(uniquePositions)
-    console.log(pName)
-    document.getElementById("leaderboard").innerHTML = ""
-    const div = document.createElement("div");
-    const innerdiv = document.createElement("div");
-    const name = document.createElement("div");
-    const number = document.createElement("div");
-    const time1 = document.createElement("div");
-    const club1 = document.createElement("div");
-    innerdiv.appendChild(number);
-    innerdiv.appendChild(name);
-    div.appendChild(innerdiv);
-    div.appendChild(time1);
-    document.getElementById("leaderboard").appendChild(div)
-    number.innerHTML = 1;
-    name.innerHTML = pName[0];
-    name.appendChild(club1);
-    club1.innerHTML = pClub[0]
-    now = new Date().getTime();
-    if (raceStartTime) {
-        time = (now - raceStartTime);
-    }
-    else {
-        time = 0
-    }
-    if (time <= reader3_Timings[0]) {
-        time1.innerHTML = millisToMinutesAndSeconds(time);
-    }
-    // console.log(raceStartTime)
-    if (time >= reader3_Timings[0]) {
-        // time = reader3_Timings[0];
-        const img = document.createElement("img");
-        img.setAttribute("class", "flag");
-        img.setAttribute("src", "finish flag.png");
-        time1.innerHTML = millisToMinutesAndSeconds(reader3_Timings[0]);
-        time1.appendChild(img)
-    }
-
-
-    runnerdelays = []
-    runnerdelays.push(raceStartTime)
-    for (i = 1; i < reader1_Timings.length; i++) {
-        if (time >= reader3_Timings[i]) {
-            runnerdelays.push(reader3_Timings[i] - reader3_Timings[0])
+        let uniquePositions = [];
+        readerPositions.forEach((c) => {
+            if (!uniquePositions.includes(c)) {
+                uniquePositions.push(c);
+                pName.push(participants[c]["Name"] + " " + participants[c]["Surname"])
+                pClub.push(participants[c]["Club"])
+            }
         }
-        else if (time >= reader2_Timings[i]) {
-            runnerdelays.push(reader2_Timings[i] - reader2_Timings[0])
-        }
-        else if (time >= reader1_Timings[i]) {
-            runnerdelays.push(reader1_Timings[i] - reader1_Timings[0])
-        }
-        else {
-            runnerdelays.push(0)
-        }
-    }
-
-
-    for (i = 1; i < participants.length - 1; i++) {
+        )
+        console.log(uniquePositions)
+        console.log(pName)
+        document.getElementById("leaderboard").innerHTML = ""
         const div = document.createElement("div");
         const innerdiv = document.createElement("div");
         const name = document.createElement("div");
         const number = document.createElement("div");
         const time1 = document.createElement("div");
+        const club1 = document.createElement("div");
         innerdiv.appendChild(number);
         innerdiv.appendChild(name);
         div.appendChild(innerdiv);
         div.appendChild(time1);
         document.getElementById("leaderboard").appendChild(div)
-        number.innerHTML = i + 1;
-        name.innerHTML = pName[i];
-        time1.innerHTML = "+" + millisToMinutesAndSeconds(runnerdelays[i]);
-        if (time >= reader3_Timings[i]) {
+        number.innerHTML = 1;
+        name.innerHTML = pName[0];
+        name.appendChild(club1);
+        club1.innerHTML = pClub[0]
+        
+        if (time <= reader3_Timings[0]) {
+            time1.innerHTML = millisToMinutesAndSeconds(time);
+        }
+        // console.log(raceStartTime)
+        if (time >= reader3_Timings[0]) {
+            // time = reader3_Timings[0];
             const img = document.createElement("img");
             img.setAttribute("class", "flag");
             img.setAttribute("src", "finish flag.png");
+            time1.innerHTML = millisToMinutesAndSeconds(reader3_Timings[0]);
             time1.appendChild(img)
         }
-        if (i < 3) {
-            const club = document.createElement("div");
-            club.innerHTML = pClub[i]
-            document.getElementById("leaderboard").appendChild(div).childNodes[0].childNodes[1].appendChild(club);
+
+
+        runnerdelays = []
+        runnerdelays.push(raceStartTime)
+        for (i = 1; i < reader1_Timings.length; i++) {
+            if (time >= reader3_Timings[i]) {
+                runnerdelays.push(reader3_Timings[i] - reader3_Timings[0])
+            }
+            else if (time >= reader2_Timings[i]) {
+                runnerdelays.push(reader2_Timings[i] - reader2_Timings[0])
+            }
+            else if (time >= reader1_Timings[i]) {
+                runnerdelays.push(reader1_Timings[i] - reader1_Timings[0])
+            }
+            else {
+                runnerdelays.push(0)
+            }
         }
-        // document.getElementById("leaderboard");
+
+
+        for (i = 1; i < participants.length - 1; i++) {
+            const div = document.createElement("div");
+            const innerdiv = document.createElement("div");
+            const name = document.createElement("div");
+            const number = document.createElement("div");
+            const time1 = document.createElement("div");
+            innerdiv.appendChild(number);
+            innerdiv.appendChild(name);
+            div.appendChild(innerdiv);
+            div.appendChild(time1);
+            document.getElementById("leaderboard").appendChild(div)
+            number.innerHTML = i + 1;
+            name.innerHTML = pName[i];
+            time1.innerHTML = "+" + millisToMinutesAndSeconds(runnerdelays[i]);
+            if (time >= reader3_Timings[i]) {
+                const img = document.createElement("img");
+                img.setAttribute("class", "flag");
+                img.setAttribute("src", "finish flag.png");
+                time1.appendChild(img)
+            }
+            if (i < 3) {
+                const club = document.createElement("div");
+                club.innerHTML = pClub[i]
+                document.getElementById("leaderboard").appendChild(div).childNodes[0].childNodes[1].appendChild(club);
+            }
+            // document.getElementById("leaderboard");
+        }
     }
 }
-var Timer = setInterval(firstRunner,
+var Timer1 = setInterval(firstRunner,
     1000);
 firstRunner()
 // console.log(millisToMinutesAndSeconds(runnerdelays))
@@ -236,7 +248,6 @@ var finish2 = 0
 var finish3 = 0
 
 getFirebaseDataon()
-fRunner()
 function fRunner() {
     var y = 2412 / 3
     var time1Coordinate = 681
@@ -329,4 +340,5 @@ const render1 = setInterval(fRunner, 6810)
 if (time >= reader3_Timings[participants.length - 2]) { //change this
     clearInterval(render1)
     clearInterval(Timer);
+    clearInterval(Timer1);
 }
