@@ -336,7 +336,7 @@ function fRunner() {
         window.sessionStorage.setItem("dot_place", JSON.stringify(dot_place));
     }
 }
-const render1 = setInterval(fRunner, 6810)
+const render1 = setInterval(fRunner, 7470)
 if (time >= reader3_Timings[participants.length - 2]) { //change this
     clearInterval(render1)
     clearInterval(Timer);
