@@ -5,8 +5,8 @@ var firstRunner = 0;
 var secondRunner = 0;
 var thirdRunner = 0;
 var zoomFactor = 3.7
-var xoffset = zoomFactor*80/3.7
-var yoffset = zoomFactor*800/3.7
+var xoffset = zoomFactor * 80 / 3.7
+var yoffset = zoomFactor * 800 / 3.7
 var startingPoint = yoffset / zoomFactor
 circleSize = 10
 
@@ -92,7 +92,7 @@ function getFirebaseDataon() {
         reader3sync = arduino3 + new Date("Mar 31, 1900").getTime();
         for (i = 0; i <= reader3Inbox.length - 2; i++) { //Change This
             let t = reader3Inbox[i].slice(21, 31)
-            let ms = reader3sync + Number(t.split(':')[0]) * 60 * 60 * 1000 + Number(t.split(':')[1]) * 60 * 1000 + Number(t.split(':')[2]) * 1000 + Number(t.split(':')[3]);
+            let ms = Number(t.split(':')[0]) * 60 * 60 * 1000 + Number(t.split(':')[1]) * 60 * 1000 + Number(t.split(':')[2]) * 1000 + Number(t.split(':')[3]);
             reader3_Timings.push(ms);
             readerPositions.push(parseInt(reader3Inbox[i].slice(-2)))
             // console.log(reader1Inbox[i])
@@ -102,7 +102,7 @@ function getFirebaseDataon() {
         reader2sync = arduino2 + new Date("Mar 31, 1900").getTime();
         for (i = 1; i <= reader2Inbox.length - 1; i++) {
             let t = reader2Inbox[i].slice(21, 31)
-            let ms = reader2sync + Number(t.split(':')[0]) * 60 * 60 * 1000 + Number(t.split(':')[1]) * 60 * 1000 + Number(t.split(':')[2]) * 1000 + Number(t.split(':')[3]);
+            let ms = Number(t.split(':')[0]) * 60 * 60 * 1000 + Number(t.split(':')[1]) * 60 * 1000 + Number(t.split(':')[2]) * 1000 + Number(t.split(':')[3]) - arduino3 + arduino2;
             reader2_Timings.push(ms);
             readerPositions.push(parseInt(reader2Inbox[i].slice(-2)))
             // console.log(reader1Inbox[i])
@@ -112,7 +112,7 @@ function getFirebaseDataon() {
         reader1sync = arduino1 + new Date("Mar 31, 1900").getTime();
         for (i = 1; i <= reader1Inbox.length - 1; i++) {
             let t = reader1Inbox[i].slice(21, 32)
-            let ms = reader1sync + Number(t.split(':')[0]) * 60 * 60 * 1000 + Number(t.split(':')[1]) * 60 * 1000 + Number(t.split(':')[2]) * 1000 + Number(t.split(':')[3]);
+            let ms = Number(t.split(':')[0]) * 60 * 60 * 1000 + Number(t.split(':')[1]) * 60 * 1000 + Number(t.split(':')[2]) * 1000 + Number(t.split(':')[3]) - arduino3 + arduino1;
             reader1_Timings.push(ms);
             readerPositions.push(parseInt(reader1Inbox[i].slice(-2)))
             // console.log(reader1Inbox[i])
@@ -130,7 +130,7 @@ function getFirebaseDataon() {
         });
         let t = reader0[1].slice(20, 30)
         // raceStartTime = reader0sync + Number(t.split(':')[0]) * 60 * 60 * 1000 + Number(t.split(':')[1]) * 60 * 1000 + Number(t.split(':')[2]) * 1000 + Number(t.split(':')[3])
-        raceStartTime=new Date("April 12, 2022 7:00:00").getTime()
+        // raceStartTime=new Date("April 12, 2022 7:00:00").getTime()
         runnerdelays.push(raceStartTime)
         for (i = 1; i < reader1_Timings.length; i++) {
             if (reader3_Timings[i]) {
@@ -164,19 +164,31 @@ function getFirebaseDataon() {
         // console.log(reader1_Timings)
         // console.log(reader2_Timings)
         // console.log(reader3_Timings)
-
     })
 }
 function getData() {
-    getFirebaseDataon()
+    raceStartTime = new Date().getTime()
+    window.sessionStorage.setItem("raceStartTime", JSON.stringify(raceStartTime));
+    document.getElementById("button").setAttribute("class", "hidden");
+    // getFirebaseDataon()
 }
+getFirebaseDataon()
+// console.log(window.sessionStorage.getItem("raceStartTime"))
+if (window.sessionStorage.getItem("raceStartTime")) {
+    raceStartTime = window.sessionStorage.getItem
+        ("raceStartTime")
+    document.getElementById("button").setAttribute("class", "hidden");
+}
+else {
+    document.getElementById("time").innerHTML="Race is Not Started"
+}
+
 
 var finish2 = 0
 var finish3 = 0
 function erraseCanvas() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
-fRunner()
 function fRunner() {
     // console.log(reader1Inbox)
 
@@ -215,7 +227,7 @@ function fRunner() {
     ctx.stroke()
     ctx.fillStyle = "black";
     ctx.font = "20px Arial";
-    ctx.fillText("Checkpoint 1", (parseInt(cell[y * i]['x']) + xoffset) / zoomFactor - 130, 580 - (parseInt(cell[y * i]['y']) + yoffset) / zoomFactor -5 );
+    ctx.fillText("Checkpoint 1", (parseInt(cell[y * i]['x']) + xoffset) / zoomFactor - 130, 580 - (parseInt(cell[y * i]['y']) + yoffset) / zoomFactor - 5);
 
     i = 2;
     ctx.beginPath();
@@ -238,83 +250,97 @@ function fRunner() {
     ctx.fillText("Finish", (parseInt(cell[2411]['x']) + xoffset) / zoomFactor - 30, 580 - (parseInt(cell[2411]['y']) + yoffset) / zoomFactor + 30);
     ctx.stroke()
     // firebase.database().ref('Data/Dot_Place').once('value', function (data) {
-        if (window.sessionStorage.getItem("dot_place")) {
-            var dot_place = JSON.parse(window.sessionStorage.getItem("dot_place"));
-            firstRunner = dot_place[1]
-            secondRunner = dot_place[2]
-            thirdRunner = dot_place[3]
-            console.log(dot_place)
-        }
-        else {
-            firstRunner = 0;
-            secondRunner = 0;
-            thirdRunner = 0;
-        }
-        // if (raceStartTime) {
-        if (firstRunner <= y + 20) {
+    if (window.sessionStorage.getItem("dot_place")) {
+        var dot_place = JSON.parse(window.sessionStorage.getItem("dot_place"));
+        firstRunner = dot_place[1]
+        secondRunner = dot_place[2]
+        thirdRunner = dot_place[3]
+        finish2 = dot_place[4]
+        finish3 = dot_place[5]
+        // console.log(dot_place)
+    }
+    else {
+        firstRunner = 0;
+        secondRunner = 0;
+        thirdRunner = 0;
+        finish2 = 0
+        finish3 = 0
+    }
+    // console.log(time)
+    // console.log(reader3_Timings[1])
+    if (raceStartTime) {
+        if (firstRunner < y + 20) {
             firstRunner += 10;
-            if (reader1_Timings[1]) {
-                firstRunner = y
+            if (time >= reader1_Timings[1]) {
+                firstRunner = y + 20
+                console.log("hello")
             }
         }
-        if (firstRunner <= 2 * y + 20 && reader1_Timings[1]) {
+        if (firstRunner < 2 * y + 20 && time >= reader1_Timings[1]) {
             firstRunner += 10;
-            if (reader2_Timings[1]) {
-                firstRunner = 2 * y
+            console.log("bye")
+            if (time >= reader2_Timings[1]) {
+                firstRunner = 2 * y + 20
+                console.log("hi")
             }
         }
-        if ((firstRunner <= 3 * y - 10) && reader2_Timings[1]) {
+        if ((firstRunner <= 3 * y - 10) && time >= reader2_Timings[1]) {
             firstRunner += 10;
         }
-        if (reader3_Timings[1]) {
+        if (time >= reader3_Timings[1]) {
             firstRunner = 2411
+            console.log(time)
+            console.log(reader3_Timings)
         }
-    
+
         if (secondRunner <= y) {
             secondRunner += 9
-            if (reader1_Timings[2]) {
+            if (time >= reader1_Timings[2]) {
                 secondRunner = y
             }
         }
-        if (secondRunner <= 2 * y && reader1_Timings[2]) {
+        if (secondRunner <= 2 * y && time >= reader1_Timings[2]) {
             secondRunner = Math.floor(firstRunner - (runnerdelays[1] / time1Coordinate));
-            if (reader2_Timings[2]) {
+            if (time >= reader2_Timings[2]) {
                 secondRunner = 2 * y
             }
         }
-        if ((secondRunner <= 3 * y - 10) && reader2_Timings[2]) {
+        if ((secondRunner <= 3 * y - 10) && time >= reader2_Timings[2]) {
             secondRunner = Math.floor(firstRunner - (runnerdelays[1] / time1Coordinate));
         }
-        if (reader3_Timings[2]) {
+        if (time >= reader3_Timings[2]) {
             secondRunner = 2411
             finish2 = 30
         }
         if (thirdRunner <= y - 20) {
             thirdRunner += 8
-            if (reader1_Timings[3]) {
+            if (time >= reader1_Timings[3]) {
                 thirdRunner = y
             }
         }
-        if (thirdRunner <= 2 * y - 20 && reader1_Timings[3]) {
+        if (thirdRunner <= 2 * y - 20 && time >= reader1_Timings[3]) {
             thirdRunner = Math.floor(firstRunner - (runnerdelays[2] / time1Coordinate));
-            if (reader2_Timings[3]) {
+            if (time >= reader2_Timings[3]) {
                 thirdRunner = 2 * y - 20
             }
         }
-        if ((thirdRunner <= 3 * y - 10) && reader2_Timings[3]) {
+        if ((thirdRunner <= 3 * y - 10) && time >= reader2_Timings[3]) {
             thirdRunner = Math.floor(firstRunner - (runnerdelays[2] / time1Coordinate));
         }
-        if (reader3_Timings[3]) {
+        if (time >= reader3_Timings[3]) {
             thirdRunner = 2411
             finish3 = -30
         }
         var dot_place = {
             1: firstRunner,
             2: secondRunner,
-            3: thirdRunner
+            3: thirdRunner,
+            4: finish2,
+            5: finish3
         }
         window.sessionStorage.setItem("dot_place", JSON.stringify(dot_place));
-        // firebase.database().ref('Data/Dot_Place').set(dot_place)
+    }
+    // firebase.database().ref('Data/Dot_Place').set(dot_place)
     // })
     ctx.beginPath();
     ctx.arc((parseInt(cell[thirdRunner]['x']) + xoffset) / zoomFactor, 580 - (parseInt(cell[thirdRunner]['y']) + yoffset + finish3) / zoomFactor, 10, 0, 2 * Math.PI);
@@ -354,27 +380,9 @@ function fRunner() {
     ctx.fillStyle = "white";
     ctx.fill()
     ctx.fillText("1", (parseInt(cell[firstRunner]['x']) + xoffset) / zoomFactor - 4, 580 - (parseInt(cell[firstRunner]['y']) + yoffset) / zoomFactor + 4);
-
-
-
-
-
-
-
-
-    // if (thirdRunner >= 2411) {
-    //     console.log(firstRunner + "Loop Closed")
-    //     clearInterval(render1)
-    //     // clearInterval(Timer)
-
-    // }
 }
 
-const render1 = setInterval(fRunner, 510)
-
-
-
-
+const render1 = setInterval(fRunner, 6810)
 function millisToMinutesAndSeconds(millis) {
     var minutes = Math.floor(millis / 60000);
     var seconds = ((millis % 60000) / 1000).toFixed(0);
@@ -387,53 +395,63 @@ function minutestomillis(time) {
 }
 var time = 0;
 function TimerFunction() {
-    // Get today's date and time
-    now = new Date().getTime();
-    // now = new Date("December 19, 2021 9:00:20").getTime();
-    
-    if (raceStartTime) {
-        time = now - raceStartTime;
-    }
-    var expected;
-    var sign = false;
-    if (reader3_Timings[1]) {
-        expected = minutestomillis(raceInfo[3]["ExpectedTime"]) - (reader3_Timings[1] - raceStartTime)
-    }
-    else if (reader2_Timings[1]) {
-        expected = minutestomillis(raceInfo[2]["ExpectedTime"]) - (reader2_Timings[1] - raceStartTime)
-    }
-    else if (reader1_Timings[1]) {
-        expected = minutestomillis(raceInfo[1]["ExpectedTime"]) - (reader1_Timings[1] - raceStartTime)
-    }
-    else {
-        expected = 0;
-    }
-    if (expected < 0) {
-        sign = true;
-    } var
-        // expected = Math.abs(expected)
-        expected=160000
-    expectedTime = millisToMinutesAndSeconds(expected)
-    // console.log(expectedTime)
-    if (raceStartTime) {
-        document.getElementById("expected").innerHTML = (sign ? "+" : "-") + expectedTime;
-        document.getElementById("thanExpected").innerHTML ="THAN EXPECTED"
-    }
-    distance = raceInfo[3]["Distance"] * (time / 60000) / raceInfo[3]["ExpectedTime"]
-    document.getElementById("distance").innerHTML = distance.toFixed(2);
-    document.getElementById("tDistance").innerHTML = raceInfo[3]["Distance"]+"km";
-    // console.log(reader3_Timings[participants.length - 1])
-    if (reader3_Timings[participants.length - 1]) { //change this
+    // console.log(Boolean(time >=reader3_Timings[participants.length - 2]))
+    if (time >= reader3_Timings[participants.length - 2]) { //change this
         clearInterval(render1)
         clearInterval(Timer);
         document.getElementById("expected").innerHTML = "Race Finished";
-        time = reader3_Timings[participants.length - 1] - raceStartTime;
-    }
-    if (raceStartTime) {
+        document.getElementById("thanExpected").innerHTML = ""
+        time = reader3_Timings[participants.length - 2];
+        distance = raceInfo[3]["Distance"] * (time / 60000) / raceInfo[3]["ExpectedTime"]
         document.getElementById("time").innerHTML = millisToMinutesAndSeconds(time);
+        document.getElementById("distance").innerHTML = distance.toFixed(2);
+        document.getElementById("tDistance").innerHTML = raceInfo[3]["Distance"] + "km";
+        console.log(time)
+    }
+    else {
+        // Get today's date and time
+        now = new Date().getTime();
+        // now = new Date("December 19, 2021 9:00:20").getTime();
+
+        if (raceStartTime) {
+            document.getElementById("button").disabled = true
+            time = (now - raceStartTime);
+        }
+        var expected;
+        var sign = false;
+        if (time >= reader3_Timings[1]) {
+            expected = minutestomillis(raceInfo[3]["ExpectedTime"]) - (reader3_Timings[1])
+        }
+        else if (time >= reader2_Timings[1]) {
+            expected = minutestomillis(raceInfo[2]["ExpectedTime"]) - (reader2_Timings[1])
+        }
+        else if (time >= reader1_Timings[1]) {
+            expected = minutestomillis(raceInfo[1]["ExpectedTime"]) - (reader1_Timings[1])
+        }
+        else {
+            expected = 0;
+        }
+        if (expected < 0) {
+            sign = true;
+        } var
+            expected = Math.abs(expected)
+        // expected = 160000
+        expectedTime = millisToMinutesAndSeconds(expected)
+        // console.log(expectedTime)
+        if (raceStartTime) {
+            document.getElementById("expected").innerHTML = (sign ? "+" : "-") + expectedTime;
+            document.getElementById("thanExpected").innerHTML = "THAN EXPECTED"
+        }
+        distance = raceInfo[3]["Distance"] * (time / 60000) / raceInfo[3]["ExpectedTime"]
+        document.getElementById("distance").innerHTML = distance.toFixed(2);
+        document.getElementById("tDistance").innerHTML = raceInfo[3]["Distance"] + "km";
+        // console.log(reader3_Timings[participants.length - 1])
+
+        if (raceStartTime) {
+            document.getElementById("time").innerHTML = millisToMinutesAndSeconds(time);
+        }
     }
     // console.log(time)
 }
-var Timer = setInterval(TimerFunction, 100);
-TimerFunction()
-
+var Timer = setInterval(TimerFunction, 500);
+fRunner()

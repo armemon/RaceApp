@@ -130,6 +130,7 @@ font-size: 1.5em;
     margin-bottom: 70px;
 }
 #time{
+    margin-top: -25px;
     font-size: 3em;
     font-weight: 700;
     margin-bottom: -20px;
@@ -147,6 +148,7 @@ font-size: 1.5em;
 .ratio1{
     /* font-size: 3em; */
     margin-top: -45px;
+    margin-bottom: 10px;
 }
 .ratio2{
 font-size: 4em;
@@ -166,5 +168,13 @@ font-size: 4em;
     /* z-index: 1; */
     font-size: 1.5em !important;
 }
-
+#button{
+    margin: 10px;
+}
+.hidden{
+    visibility: hidden;
+    margin: -10;
+    height: 0;
+    padding: 0;
+}
 
