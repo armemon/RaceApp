@@ -37,6 +37,7 @@ var pClub = []
 
 firebase.database().ref('Data/01_RaceInfo').once('value', function (data) {
     raceInfo = data.val()
+    document.getElementById("tDistance").innerHTML = raceInfo[3]["Distance"] + "km";
     // console.log(raceInfo)
 })
 firebase.database().ref('Data/02_Participants').once('value', function (data) {
@@ -182,11 +183,15 @@ if (window.sessionStorage.getItem("raceStartTime")) {
 }
 else {
     document.getElementById("time").innerHTML = "Race is Not Started"
+    distance = 0
+    document.getElementById("distance").innerHTML = distance.toFixed(2);
+    // document.getElementById("tDistance").innerHTML = 5 + "km";
 }
+var time
 function Time() {
     now = new Date().getTime();
     if (raceStartTime) {
-        time = (now - raceStartTime)*10;
+        time = (now - raceStartTime) * 10;
     }
     else {
         time = 0
@@ -299,7 +304,7 @@ function fRunner() {
                 firstRunner = 2 * y
             }
         }
-        
+
         if ((firstRunner <= 3 * y - 10) && time >= reader2_Timings[0]) {
             firstRunner += 10;
         }
@@ -316,14 +321,14 @@ function fRunner() {
             }
         }
         if (secondRunner <= 2 * y && time >= reader1_Timings[1]) {
-            secondRunner +=9
+            secondRunner += 9
             console.log(Math.floor(runnerdelays[1] / time1Coordinate));
             if (time >= reader2_Timings[1]) {
                 secondRunner = 2 * y
             }
         }
         if ((secondRunner <= 3 * y - 10) && time >= reader2_Timings[1]) {
-            secondRunner +=9
+            secondRunner += 9
         }
         if (time >= reader3_Timings[1]) {
             secondRunner = 2411
@@ -336,13 +341,13 @@ function fRunner() {
             }
         }
         if (thirdRunner <= 2 * y - 20 && time >= reader1_Timings[2]) {
-            thirdRunner +=8
+            thirdRunner += 8
             if (time >= reader2_Timings[2]) {
                 thirdRunner = 2 * y
             }
         }
         if ((thirdRunner <= 3 * y - 10) && time >= reader2_Timings[2]) {
-            thirdRunner +=8
+            thirdRunner += 8
         }
         if (time >= reader3_Timings[2]) {
             thirdRunner = 2411
@@ -423,10 +428,8 @@ function TimerFunction() {
         document.getElementById("time").innerHTML = millisToMinutesAndSeconds(time);
         distance = 5
         document.getElementById("distance").innerHTML = distance.toFixed(2);
-        document.getElementById("tDistance").innerHTML = raceInfo[3]["Distance"] + "km";
-        console.log(time)
     }
-    if(time) {
+    if(raceStartTime) {
         // Get today's date and time
         // now = new Date().getTime();
         // // now = new Date("December 19, 2021 9:00:20").getTime();
@@ -463,7 +466,7 @@ function TimerFunction() {
         if (time > reader3_Timings[0]) {
             distance = 5
         }
-        else{
+        else {
             distance = raceInfo[3]["Distance"] * (time / 60000) / raceInfo[3]["ExpectedTime"]
         }
         document.getElementById("distance").innerHTML = distance.toFixed(2);
