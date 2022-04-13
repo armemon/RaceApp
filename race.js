@@ -37,11 +37,11 @@ var pClub = []
 
 firebase.database().ref('Data/01_RaceInfo').once('value', function (data) {
     raceInfo = data.val()
-    console.log(raceInfo)
+    // console.log(raceInfo)
 })
 firebase.database().ref('Data/02_Participants').once('value', function (data) {
     participants = data.val()
-    console.log(participants[1])
+    // console.log(participants[1])
 })
 function getFirebaseDataon() {
     firebase.database().ref('Data/03_Inbox').on('value', function (data) {
@@ -84,7 +84,7 @@ function getFirebaseDataon() {
         // console.log(reader0)
 
         // console.log(reader2Inbox)
-        console.log(reader3Inbox)
+        // console.log(reader3Inbox)
         arduino0 = parseInt(reader0[0].slice(22)) * 1000 + parseInt(reader0[0].slice(36))
         reader0sync = arduino0 + new Date("Mar 31, 1900").getTime();
 
@@ -115,7 +115,7 @@ function getFirebaseDataon() {
             let ms = Number(t.split(':')[0]) * 60 * 60 * 1000 + Number(t.split(':')[1]) * 60 * 1000 + Number(t.split(':')[2]) * 1000 + Number(t.split(':')[3]) - arduino3 + arduino1;
             reader1_Timings.push(ms);
             readerPositions.push(parseInt(reader1Inbox[i].slice(-2)))
-            console.log(millisToMinutesAndSeconds(reader1_Timings[i-1]))
+            // console.log(millisToMinutesAndSeconds(reader1_Timings[i-1]))
             // console.log(reader1Inbox[i])
         }
         for (i = 1; i < participants.length; i++) {
@@ -145,10 +145,10 @@ function getFirebaseDataon() {
             }
 
         }
-        console.log(uniquePositions)
-        console.log(participants.length)
-        console.log(pName)
-        console.log(runnerdelays)
+        // console.log(uniquePositions)
+        // console.log(participants.length)
+        // console.log(pName)
+        // console.log(runnerdelays)
 
         // console.log(millisToMinutesAndSeconds(runnerdelays))
 
@@ -193,7 +193,7 @@ function Time() {
     }
 }
 var Timer = setInterval(Time,
-    1000);
+    500);
 Time()
 
 
@@ -286,15 +286,15 @@ function fRunner() {
             firstRunner += 10;
             if (time >= reader1_Timings[0]) {
                 firstRunner = y
-                console.log("hello")
+                // console.log("hello")
             }
         }
         if (firstRunner < 2 * y + 10 && time >= reader1_Timings[0]) {
             firstRunner += 10;
-            console.log("bye")
+            // console.log("bye")
             if (time >= reader2_Timings[0]) {
                 firstRunner = 2 * y
-                console.log("hi")
+                // console.log("hi")
             }
         }
         if ((firstRunner <= 3 * y - 10) && time >= reader2_Timings[0]) {
@@ -302,8 +302,8 @@ function fRunner() {
         }
         if (time >= reader3_Timings[0]) {
             firstRunner = 2411
-            console.log(time)
-            console.log(reader3_Timings)
+            // console.log(time)
+            // console.log(reader3_Timings)
         }
 
         if (secondRunner <= y) {
@@ -420,7 +420,7 @@ function TimerFunction() {
         document.getElementById("time").innerHTML = millisToMinutesAndSeconds(time);
         document.getElementById("distance").innerHTML = distance.toFixed(2);
         document.getElementById("tDistance").innerHTML = raceInfo[3]["Distance"] + "km";
-        console.log(time)
+        // console.log(time)
     }
     else {
         // Get today's date and time

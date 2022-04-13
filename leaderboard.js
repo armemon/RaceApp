@@ -38,7 +38,7 @@ function Time() {
     }
 }
 var Timer = setInterval(Time,
-    1000);
+    500);
 Time()
 
 function getFirebaseDataon() {
@@ -133,7 +133,7 @@ function firstRunner() {
         // console.log(reader1Inbox[i])
     }
     if (reader1_Timings[0]) {
-        console.log(reader1_Timings[0])
+        // console.log(reader1_Timings[0])
         for (i = 1; i < participants.length; i++) {
             readerPositions.push(i)
         }
@@ -146,8 +146,8 @@ function firstRunner() {
             }
         }
         )
-        console.log(uniquePositions)
-        console.log(pName)
+        // console.log(uniquePositions)
+        // console.log(pName)
         document.getElementById("leaderboard").innerHTML = ""
         const div = document.createElement("div");
         const innerdiv = document.createElement("div");
