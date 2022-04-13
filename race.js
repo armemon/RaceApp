@@ -185,7 +185,7 @@ else {
 function Time() {
     now = new Date().getTime();
     if (raceStartTime) {
-        time = (now - raceStartTime) + 60000 * 9;
+        time = (now - raceStartTime);
     }
     else {
         time = 0
