@@ -10,6 +10,30 @@ firebase.database().ref('Data/02_Participants').once('value', function (data) {
     participants = data.val()
     // console.log(participants[1])
 })
+var speed;
+var firstRunner
+var secondRunner
+var thirdRunner
+var finish2
+var finish3
+if (window.sessionStorage.getItem("dot_place")) {
+    var dot_place = JSON.parse(window.sessionStorage.getItem("dot_place"));
+    firstRunner = dot_place[1]
+    secondRunner = dot_place[2]
+    thirdRunner = dot_place[3]
+    finish2 = dot_place[4]
+    finish3 = dot_place[5]
+    speed = dot_place[6]
+    // console.log(dot_place)
+}
+else {
+    firstRunner = 0;
+    secondRunner = 0;
+    thirdRunner = 0;
+    finish2 = 0
+    finish3 = 0
+    speed = 1
+}
 var reader1_Timings = []
 var reader2_Timings = []
 var reader3_Timings = []
@@ -31,7 +55,7 @@ if (window.sessionStorage.getItem("raceStartTime")) {
 function Time() {
     now = new Date().getTime();
     if (raceStartTime) {
-        time = (now - raceStartTime);
+        time = (now - raceStartTime) * speed;
     }
     else {
         time = 0
@@ -83,7 +107,7 @@ function getFirebaseDataon() {
 
     });
 }
-function firstRunner() {
+function firstRunner1() {
 
     var reader1_Timings = []
     var reader3_Timings = []
@@ -164,7 +188,7 @@ function firstRunner() {
         name.innerHTML = pName[0];
         name.appendChild(club1);
         club1.innerHTML = pClub[0]
-        
+
         if (time <= reader3_Timings[0]) {
             time1.innerHTML = millisToMinutesAndSeconds(time);
         }
@@ -226,9 +250,9 @@ function firstRunner() {
         }
     }
 }
-var Timer1 = setInterval(firstRunner,
+var Timer1 = setInterval(firstRunner1,
     1000);
-firstRunner()
+firstRunner1()
 // console.log(millisToMinutesAndSeconds(runnerdelays))
 
 
@@ -251,23 +275,6 @@ getFirebaseDataon()
 function fRunner() {
     var y = 2412 / 3
     var time1Coordinate = 681
-
-    if (window.sessionStorage.getItem("dot_place")) {
-        var dot_place = JSON.parse(window.sessionStorage.getItem("dot_place"));
-        firstRunner = dot_place[1]
-        secondRunner = dot_place[2]
-        thirdRunner = dot_place[3]
-        finish2 = dot_place[4]
-        finish3 = dot_place[5]
-        // console.log(dot_place)
-    }
-    else {
-        firstRunner = 0;
-        secondRunner = 0;
-        thirdRunner = 0;
-        finish2 = 0
-        finish3 = 0
-    }
     if (raceStartTime) {
         if (firstRunner < y + 9) {
             if (time < reader1_Timings[0]) {
@@ -286,7 +293,7 @@ function fRunner() {
                 firstRunner = 2 * y
             }
         }
-        
+
         if ((firstRunner <= 3 * y - 10) && time >= reader2_Timings[0]) {
             firstRunner += 10;
         }
@@ -303,14 +310,14 @@ function fRunner() {
             }
         }
         if (secondRunner <= 2 * y && time >= reader1_Timings[1]) {
-            secondRunner +=9
+            secondRunner += 9
             console.log(Math.floor(runnerdelays[1] / time1Coordinate));
             if (time >= reader2_Timings[1]) {
                 secondRunner = 2 * y
             }
         }
         if ((secondRunner <= 3 * y - 10) && time >= reader2_Timings[1]) {
-            secondRunner +=9
+            secondRunner += 9
         }
         if (time >= reader3_Timings[1]) {
             secondRunner = 2411
@@ -323,13 +330,13 @@ function fRunner() {
             }
         }
         if (thirdRunner <= 2 * y - 20 && time >= reader1_Timings[2]) {
-            thirdRunner +=8
+            thirdRunner += 8
             if (time >= reader2_Timings[2]) {
                 thirdRunner = 2 * y
             }
         }
         if ((thirdRunner <= 3 * y - 10) && time >= reader2_Timings[2]) {
-            thirdRunner +=8
+            thirdRunner += 8
         }
         if (time >= reader3_Timings[2]) {
             thirdRunner = 2411
@@ -340,12 +347,13 @@ function fRunner() {
             2: secondRunner,
             3: thirdRunner,
             4: finish2,
-            5: finish3
+            5: finish3,
+            6: speed
         }
         window.sessionStorage.setItem("dot_place", JSON.stringify(dot_place));
     }
 }
-const render1 = setInterval(fRunner, 7470)
+const render1 = setInterval(fRunner, 7470 / speed)
 if (time >= reader3_Timings[participants.length - 2]) { //change this
     clearInterval(render1)
     clearInterval(Timer);
