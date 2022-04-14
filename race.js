@@ -227,12 +227,14 @@ var finish3 = 0
 function erraseCanvas() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
+var cell = XL_row_object
 function fRunner() {
     // console.log(reader1Inbox)
 
     erraseCanvas()
+    // console.log()
     var cell = XL_row_object
-    var y = 2412 / 3
+    var y = cell.length / 3
     var i = 0;
     ctx.moveTo((parseInt(cell[y * i]['x']) + xoffset) / zoomFactor, 580 - (parseInt(cell[y * i]['y']) + yoffset) / zoomFactor);
     for (i = 0; i <= 2411; i++) {
@@ -243,7 +245,7 @@ function fRunner() {
     ctx.stroke()
     var cell = XL_row_object
     checkPoints=[0,1,2,3]
-    var y = 2412 / 3
+    var y = cell.length / 3
     // console.log(cell[y * 0])
     // for (i = 0; i < 4; i++) {
     var i = checkPoints[0];
@@ -279,13 +281,13 @@ function fRunner() {
 
     i = checkPoints[3];
     ctx.beginPath();
-    ctx.arc((parseInt(cell[2411]['x']) + xoffset) / zoomFactor, 580 - (parseInt(cell[2411]['y']) + yoffset) / zoomFactor, circleSize, 0, 2 * Math.PI);
+    ctx.arc((parseInt(cell[cell.length-1]['x']) + xoffset) / zoomFactor, 580 - (parseInt(cell[cell.length-1]['y']) + yoffset) / zoomFactor, circleSize, 0, 2 * Math.PI);
     ctx.fillStyle = "black";
     ctx.fill()
     ctx.stroke()
     ctx.fillStyle = "black";
     ctx.font = "20px Arial";
-    ctx.fillText("Finish", (parseInt(cell[2411]['x']) + xoffset) / zoomFactor - 30, 580 - (parseInt(cell[2411]['y']) + yoffset) / zoomFactor + 30);
+    ctx.fillText("Finish", (parseInt(cell[cell.length-1]['x']) + xoffset) / zoomFactor - 30, 580 - (parseInt(cell[cell.length-1]['y']) + yoffset) / zoomFactor + 30);
     ctx.stroke()
     // firebase.database().ref('Data/Dot_Place').once('value', function (data) {
     
@@ -293,18 +295,14 @@ function fRunner() {
     // console.log(reader3_Timings[1])
     if (raceStartTime) {
         if (firstRunner < checkPoints[1]*y + 9) {
-            if (time < reader1_Timings[0]) {
                 firstRunner += 10;
-            }
             if (time >= reader1_Timings[0]) {
                 firstRunner = checkPoints[1]*y
                 // console.log("hello")
             }
         }
         if (firstRunner < checkPoints[2] * y + 9 && time >= reader1_Timings[0]) {
-            if (time < reader2_Timings[0]) {
                 firstRunner += 20;
-            }
             if (time >= reader2_Timings[0]) {
                 firstRunner = checkPoints[2] * y
             }
@@ -314,7 +312,7 @@ function fRunner() {
             firstRunner += 10;
         }
         if (time >= reader3_Timings[0]) {
-            firstRunner = 2411
+            firstRunner = cell.length-1
             // console.log(time)
             // console.log(reader3_Timings)
         }
@@ -336,7 +334,7 @@ function fRunner() {
             secondRunner += 9
         }
         if (time >= reader3_Timings[1]) {
-            secondRunner = 2411
+            secondRunner = cell.length-1
             finish2 = 30
         }
         if (thirdRunner <= checkPoints[1] * y - 20) {
@@ -355,7 +353,7 @@ function fRunner() {
             thirdRunner += 8
         }
         if (time >= reader3_Timings[2]) {
-            thirdRunner = 2411
+            thirdRunner = cell.length-1
             finish3 = -30
         }
         var dot_place = {
@@ -409,8 +407,9 @@ function fRunner() {
     ctx.fill()
     ctx.fillText("1", (parseInt(cell[firstRunner]['x']) + xoffset) / zoomFactor - 4, 580 - (parseInt(cell[firstRunner]['y']) + yoffset) / zoomFactor + 4);
 }
-
-const render1 = setInterval(fRunner, 6230/speed)
+fRunner()
+const render1 = setInterval(fRunner, (6000000/((cell.length-1)/3))/speed)
+console.log((600000/((cell.length-1)/3))/speed)
 function millisToMinutesAndSeconds(millis) {
     var minutes = Math.floor(millis / 60000);
     var seconds = ((millis % 60000) / 1000).toFixed(0);
