@@ -276,25 +276,25 @@ function fRunner() {
     var y = 2412 / 3
     var time1Coordinate = 681
     if (raceStartTime) {
-        if (firstRunner < y + 9) {
+        if (firstRunner < checkPoints[1]*y + 9) {
             if (time < reader1_Timings[0]) {
                 firstRunner += 10;
             }
             if (time >= reader1_Timings[0]) {
-                firstRunner = y
+                firstRunner = checkPoints[1]*y
                 // console.log("hello")
             }
         }
-        if (firstRunner < 2 * y + 9 && time >= reader1_Timings[0]) {
+        if (firstRunner < checkPoints[2] * y + 9 && time >= reader1_Timings[0]) {
             if (time < reader2_Timings[0]) {
-                firstRunner += 10;
+                firstRunner += 20;
             }
             if (time >= reader2_Timings[0]) {
-                firstRunner = 2 * y
+                firstRunner = checkPoints[2] * y
             }
         }
 
-        if ((firstRunner <= 3 * y - 10) && time >= reader2_Timings[0]) {
+        if ((firstRunner <= checkPoints[3] * y - 10) && time >= reader2_Timings[0]) {
             firstRunner += 10;
         }
         if (time >= reader3_Timings[0]) {
@@ -303,39 +303,39 @@ function fRunner() {
             // console.log(reader3_Timings)
         }
 
-        if (secondRunner <= y) {
+        if (secondRunner <= checkPoints[1] * y) {
             secondRunner += 9
             if (time >= reader1_Timings[1]) {
-                secondRunner = y
+                secondRunner = checkPoints[1]*y
             }
         }
-        if (secondRunner <= 2 * y && time >= reader1_Timings[1]) {
-            secondRunner += 9
-            console.log(Math.floor(runnerdelays[1] / time1Coordinate));
+        if (secondRunner <= checkPoints[2] * y && time >= reader1_Timings[1]) {
+            secondRunner += 18
+            // console.log(Math.floor(runnerdelays[1] / time1Coordinate));
             if (time >= reader2_Timings[1]) {
-                secondRunner = 2 * y
+                secondRunner = checkPoints[2] * y
             }
         }
-        if ((secondRunner <= 3 * y - 10) && time >= reader2_Timings[1]) {
+        if ((secondRunner <= checkPoints[3] * y - 10) && time >= reader2_Timings[1]) {
             secondRunner += 9
         }
         if (time >= reader3_Timings[1]) {
             secondRunner = 2411
             finish2 = 30
         }
-        if (thirdRunner <= y - 20) {
+        if (thirdRunner <= checkPoints[1] * y - 20) {
             thirdRunner += 8
             if (time >= reader1_Timings[2]) {
-                thirdRunner = y
+                thirdRunner = checkPoints[1]*y
             }
         }
-        if (thirdRunner <= 2 * y - 20 && time >= reader1_Timings[2]) {
-            thirdRunner += 8
+        if (thirdRunner <= checkPoints[2] * y - 20 && time >= reader1_Timings[2]) {
+            thirdRunner += 16
             if (time >= reader2_Timings[2]) {
-                thirdRunner = 2 * y
+                thirdRunner = checkPoints[2] * y
             }
         }
-        if ((thirdRunner <= 3 * y - 10) && time >= reader2_Timings[2]) {
+        if ((thirdRunner <= checkPoints[3] * y - 10) && time >= reader2_Timings[2]) {
             thirdRunner += 8
         }
         if (time >= reader3_Timings[2]) {
@@ -353,7 +353,7 @@ function fRunner() {
         window.sessionStorage.setItem("dot_place", JSON.stringify(dot_place));
     }
 }
-const render1 = setInterval(fRunner, 7470 / speed)
+const render1 = setInterval(fRunner, 6230 / speed)
 if (time >= reader3_Timings[participants.length - 2]) { //change this
     clearInterval(render1)
     clearInterval(Timer);
