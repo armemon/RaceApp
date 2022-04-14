@@ -37,7 +37,24 @@ var raceInfo
 var participants
 var pName = []
 var pClub = []
-
+if (window.sessionStorage.getItem("dot_place")) {
+    var dot_place = JSON.parse(window.sessionStorage.getItem("dot_place"));
+    firstRunner = dot_place[1]
+    secondRunner = dot_place[2]
+    thirdRunner = dot_place[3]
+    finish2 = dot_place[4]
+    finish3 = dot_place[5]
+    speed=dot_place[6]
+    // console.log(dot_place)
+}
+else {
+    firstRunner = 0;
+    secondRunner = 0;
+    thirdRunner = 0;
+    finish2 = 0
+    finish3 = 0   
+    speed = 1
+}
 firebase.database().ref('Data/01_RaceInfo').once('value', function (data) {
     raceInfo = data.val()
     document.getElementById("tDistance").innerHTML = raceInfo[3]["Distance"] + "km";
@@ -271,24 +288,7 @@ function fRunner() {
     ctx.fillText("Finish", (parseInt(cell[2411]['x']) + xoffset) / zoomFactor - 30, 580 - (parseInt(cell[2411]['y']) + yoffset) / zoomFactor + 30);
     ctx.stroke()
     // firebase.database().ref('Data/Dot_Place').once('value', function (data) {
-    if (window.sessionStorage.getItem("dot_place")) {
-        var dot_place = JSON.parse(window.sessionStorage.getItem("dot_place"));
-        firstRunner = dot_place[1]
-        secondRunner = dot_place[2]
-        thirdRunner = dot_place[3]
-        finish2 = dot_place[4]
-        finish3 = dot_place[5]
-        speed=dot_place[6]
-        // console.log(dot_place)
-    }
-    else {
-        firstRunner = 0;
-        secondRunner = 0;
-        thirdRunner = 0;
-        finish2 = 0
-        finish3 = 0   
-        speed = 1
-    }
+    
     // console.log(time)
     // console.log(reader3_Timings[1])
     if (raceStartTime) {
