@@ -53,7 +53,7 @@ else {
     thirdRunner1 = 0;
     finish2 = 0
     finish3 = 0
-    speed = 1
+    speed = 10
 }
 firebase.database().ref('Data/01_RaceInfo').once('value', function (data) {
     raceInfo = data.val()
@@ -296,23 +296,33 @@ function fRunner() {
     if (raceStartTime) {
         if (firstRunner1 < checkPoints[1] * y + 9 && time <= reader1_Timings[0]) {
             firstRunner1 += 1;
+            distanceFlag = true
             console.log("hello")
         }
         if (firstRunner1 < checkPoints[1] * y && time >= reader1_Timings[0]) {
             firstRunner1 = checkPoints[1] * y
+            distanceFlag = false
         }
         if (firstRunner1 < checkPoints[2] * y + 9 && time >= reader1_Timings[0] && time <= reader2_Timings[0]) {
             firstRunner1 += 2;
+            distanceFlag = true
+
         }
         if (firstRunner1 < checkPoints[2] * y && time >= reader2_Timings[0]) {
             firstRunner1 = checkPoints[2] * y
+            distanceFlag = false
+
         }
 
         if ((firstRunner1 <= checkPoints[3] * y - 10) && time >= reader2_Timings[0]) {
             firstRunner1 += 1;
+            distanceFlag = true
+
         }
         if (time >= reader3_Timings[0]) {
             firstRunner1 = cell.length - 1
+            distanceFlag = false
+
             // console.log(time)
             // console.log(reader3_Timings)
         }
@@ -474,8 +484,9 @@ function TimerFunction() {
         if (time > reader3_Timings[0]) {
             distance = 5
         }
-        else {
+        if(distanceFlag) {
             distance = raceInfo[3]["Distance"] * ((time + expected)/ 60000) / raceInfo[3]["ExpectedTime"]
+            // distance = firstRunner1*5/(2411)
         }
         document.getElementById("distance").innerHTML = distance.toFixed(2);
         document.getElementById("tDistance").innerHTML = raceInfo[3]["Distance"] + "km";
