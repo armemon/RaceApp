@@ -53,7 +53,7 @@ else {
     thirdRunner1 = 0;
     finish2 = 0
     finish3 = 0
-    speed = 10
+    speed = 1
 }
 firebase.database().ref('Data/01_RaceInfo').once('value', function (data) {
     raceInfo = data.val()
