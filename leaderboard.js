@@ -10,6 +10,9 @@ firebase.database().ref('Data/02_Participants').once('value', function (data) {
     participants = data.val()
     // console.log(participants[1])
 })
+cell=[]
+cell.length = 2412;
+
 var speed;
 var firstRunner
 var secondRunner
@@ -151,7 +154,7 @@ function firstRunner1() {
         // console.log(time)
         // console.log(reader1_Timings[])
         if (time > reader1_Timings[i - 1]) {
-            console.log("reader1")
+            // console.log("reader1")
             readerPositions.push(parseInt(reader1Inbox[i].slice(-2)))
         }
         // console.log(reader1Inbox[i])
@@ -276,70 +279,66 @@ function fRunner() {
     var y = 2412 / 3
     var time1Coordinate = 681
     if (raceStartTime) {
-        if (firstRunner < checkPoints[1]*y + 9) {
-            if (time < reader1_Timings[0]) {
-                firstRunner += 10;
-            }
-            if (time >= reader1_Timings[0]) {
-                firstRunner = checkPoints[1]*y
-                // console.log("hello")
-            }
+        if (firstRunner1 < checkPoints[1] * y + 9 && time <= reader1_Timings[0]) {
+            firstRunner1 += 1;
+            console.log("hello")
         }
-        if (firstRunner < checkPoints[2] * y + 9 && time >= reader1_Timings[0]) {
-            if (time < reader2_Timings[0]) {
-                firstRunner += 20;
-            }
-            if (time >= reader2_Timings[0]) {
-                firstRunner = checkPoints[2] * y
-            }
+        if (firstRunner1 < checkPoints[1] * y && time >= reader1_Timings[0]) {
+            firstRunner1 = checkPoints[1] * y
+        }
+        if (firstRunner1 < checkPoints[2] * y + 9 && time >= reader1_Timings[0] && time <= reader2_Timings[0]) {
+            firstRunner1 += 2;
+        }
+        if (firstRunner1 < checkPoints[2] * y && time >= reader2_Timings[0]) {
+            firstRunner1 = checkPoints[2] * y
         }
 
-        if ((firstRunner <= checkPoints[3] * y - 10) && time >= reader2_Timings[0]) {
-            firstRunner += 10;
+        if ((firstRunner1 <= checkPoints[3] * y - 10) && time >= reader2_Timings[0]) {
+            firstRunner1 += 1;
         }
         if (time >= reader3_Timings[0]) {
-            firstRunner = 2411
+            firstRunner1 = cell.length - 1
             // console.log(time)
             // console.log(reader3_Timings)
         }
 
-        if (secondRunner <= checkPoints[1] * y) {
-            secondRunner += 9
+        if (secondRunner1 <= checkPoints[1] * y) {
+            secondRunner1 += .9
             if (time >= reader1_Timings[1]) {
-                secondRunner = checkPoints[1]*y
+                secondRunner1 = checkPoints[1] * y
             }
         }
-        if (secondRunner <= checkPoints[2] * y && time >= reader1_Timings[1]) {
-            secondRunner += 18
+        if (secondRunner1 <= checkPoints[2] * y && time >= reader1_Timings[1]) {
+            secondRunner1 += 1.8
             // console.log(Math.floor(runnerdelays[1] / time1Coordinate));
             if (time >= reader2_Timings[1]) {
-                secondRunner = checkPoints[2] * y
+                secondRunner1 = checkPoints[2] * y
             }
         }
-        if ((secondRunner <= checkPoints[3] * y - 10) && time >= reader2_Timings[1]) {
-            secondRunner += 9
+        if ((secondRunner1 <= checkPoints[3] * y - 10) && time >= reader2_Timings[1]) {
+            secondRunner1 += .9
         }
         if (time >= reader3_Timings[1]) {
-            secondRunner = 2411
+            secondRunner1 = cell.length - 1
             finish2 = 30
         }
-        if (thirdRunner <= checkPoints[1] * y - 20) {
-            thirdRunner += 8
+        if (thirdRunner1 <= checkPoints[1] * y - 20) {
+            thirdRunner1 += .8
             if (time >= reader1_Timings[2]) {
-                thirdRunner = checkPoints[1]*y
+                thirdRunner1 = checkPoints[1] * y
             }
         }
-        if (thirdRunner <= checkPoints[2] * y - 20 && time >= reader1_Timings[2]) {
-            thirdRunner += 16
+        if (thirdRunner1 <= checkPoints[2] * y - 20 && time >= reader1_Timings[2]) {
+            thirdRunner1 += 1.6
             if (time >= reader2_Timings[2]) {
-                thirdRunner = checkPoints[2] * y
+                thirdRunner1 = checkPoints[2] * y
             }
         }
-        if ((thirdRunner <= checkPoints[3] * y - 10) && time >= reader2_Timings[2]) {
-            thirdRunner += 8
+        if ((thirdRunner1 <= checkPoints[3] * y - 10) && time >= reader2_Timings[2]) {
+            thirdRunner1 += .8
         }
         if (time >= reader3_Timings[2]) {
-            thirdRunner = 2411
+            thirdRunner1 = cell.length - 1
             finish3 = -30
         }
         var dot_place = {
@@ -353,7 +352,8 @@ function fRunner() {
         window.sessionStorage.setItem("dot_place", JSON.stringify(dot_place));
     }
 }
-const render1 = setInterval(fRunner, 6230 / speed)
+// const render1 = setInterval(fRunner, 6230 / speed)
+const render1 = setInterval(fRunner, (600000 / ((cell.length - 1) / 3)) / speed)
 if (time >= reader3_Timings[participants.length - 2]) { //change this
     clearInterval(render1)
     clearInterval(Timer);
