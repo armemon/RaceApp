@@ -294,7 +294,7 @@ function fRunner() {
     // console.log(time)
     // console.log(reader3_Timings[1])
     if (raceStartTime) {
-        if (firstRunner1 < checkPoints[1] * y + 9 && time <= reader1_Timings[0]) {
+        if (firstRunner1 < checkPoints[1] * y + 9) {
             firstRunner1 += 1;
             distanceFlag = true
             console.log("hello")
