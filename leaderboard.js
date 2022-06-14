@@ -6,9 +6,13 @@ function millisToMinutesAndSeconds(millis) {
 firebase.database().ref('Data/01_RaceInfo').once('value', function (data) {
     raceInfo = data.val()
 })
+var participants=[]
 firebase.database().ref('Data/02_Participants').once('value', function (data) {
-    participants = data.val()
-    // console.log(participants[1])
+    temp = data.val()
+    for (i = 1; i < temp.length; i++){
+        participants[temp[i]['ID']] = temp[i]
+    }
+    console.log(participants)
 })
 cell=[]
 cell.length = 2412;
@@ -121,9 +125,9 @@ function firstRunner1() {
     pClub = []
     arduino0 = parseInt(reader0[0].slice(22)) * 1000 + parseInt(reader0[0].slice(36))
     reader0sync = arduino0 + new Date("Mar 31, 1900").getTime();
-    arduino3 = parseInt(reader3Inbox[14].slice(22)) * 1000 + parseInt(reader3Inbox[14].slice(36)) //change this
+    arduino3 = parseInt(reader3Inbox[0].slice(22)) * 1000 + parseInt(reader3Inbox[0].slice(36)) //change this
     reader3sync = arduino3 + new Date("Mar 31, 1900").getTime();
-    for (i = 0; i <= reader3Inbox.length - 2; i++) { //Change This
+    for (i = 1; i <= reader3Inbox.length - 1; i++) { //Change This
         let t = reader3Inbox[i].slice(21, 31)
         let ms = Number(t.split(':')[0]) * 60 * 60 * 1000 + Number(t.split(':')[1]) * 60 * 1000 + Number(t.split(':')[2]) * 1000 + Number(t.split(':')[3]);
         reader3_Timings.push(ms);
