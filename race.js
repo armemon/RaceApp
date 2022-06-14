@@ -202,7 +202,7 @@ if (window.sessionStorage.getItem("raceStartTime")) {
     document.getElementById("button").setAttribute("class", "hidden");
 }
 else {
-    document.getElementById("time").innerHTML = "La carrera no ha empezado"
+    document.getElementById("time").innerHTML = "Race Not Started"
     distance = 0
     document.getElementById("distance").innerHTML = distance.toFixed(2);
     // document.getElementById("tDistance").innerHTML = 5 + "km";
