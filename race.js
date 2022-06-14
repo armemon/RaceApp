@@ -53,7 +53,7 @@ else {
     thirdRunner1 = 0;
     finish2 = 0
     finish3 = 0
-    speed = 10
+    speed = 100
 }
 firebase.database().ref('Data/01_RaceInfo').once('value', function (data) {
     raceInfo = data.val()
@@ -109,9 +109,9 @@ function getFirebaseDataon() {
         arduino0 = parseInt(reader0[0].slice(22)) * 1000 + parseInt(reader0[0].slice(36))
         reader0sync = arduino0 + new Date("Mar 31, 1900").getTime();
 
-        arduino3 = parseInt(reader3Inbox[14].slice(22)) * 1000 + parseInt(reader3Inbox[14].slice(36)) //change this
+        arduino3 = parseInt(reader3Inbox[0].slice(22)) * 1000 + parseInt(reader3Inbox[0].slice(36))
         reader3sync = arduino3 + new Date("Mar 31, 1900").getTime();
-        for (i = 0; i <= reader3Inbox.length - 2; i++) { //Change This
+        for (i = 1; i <= reader3Inbox.length - 1; i++) {
             let t = reader3Inbox[i].slice(21, 31)
             let ms = Number(t.split(':')[0]) * 60 * 60 * 1000 + Number(t.split(':')[1]) * 60 * 1000 + Number(t.split(':')[2]) * 1000 + Number(t.split(':')[3]);
             reader3_Timings.push(ms);
@@ -202,7 +202,7 @@ if (window.sessionStorage.getItem("raceStartTime")) {
     document.getElementById("button").setAttribute("class", "hidden");
 }
 else {
-    document.getElementById("time").innerHTML = "Race is Not Started"
+    document.getElementById("time").innerHTML = "La carrera no ha empezado"
     distance = 0
     document.getElementById("distance").innerHTML = distance.toFixed(2);
     // document.getElementById("tDistance").innerHTML = 5 + "km";
@@ -267,7 +267,7 @@ function fRunner() {
     ctx.stroke()
     ctx.fillStyle = "black";
     ctx.font = "20px Arial";
-    ctx.fillText("Checkpoint 1", (parseInt(cell[y * i]['x']) + xoffset) / zoomFactor - 130, 580 - (parseInt(cell[y * i]['y']) + yoffset + 30) / zoomFactor + 5);
+    ctx.fillText("CheckPoint 1", (parseInt(cell[y * i]['x']) + xoffset) / zoomFactor - 100, 580 - (parseInt(cell[y * i]['y']) + yoffset + 30) / zoomFactor + 5);
 
     i = checkPoints[2];
     ctx.beginPath();
@@ -277,7 +277,7 @@ function fRunner() {
     ctx.stroke()
     ctx.fillStyle = "black";
     ctx.font = "20px Arial";
-    ctx.fillText("Checkpoint 2", (parseInt(cell[y * i]['x']) + xoffset) / zoomFactor + 20, 580 - (parseInt(cell[y * i]['y']) + yoffset + 20) / zoomFactor + 5);
+    ctx.fillText("CheckPoint 2", (parseInt(cell[y * i]['x']) + xoffset) / zoomFactor + 20, 580 - (parseInt(cell[y * i]['y']) + yoffset + 20) / zoomFactor + 5);
 
     i = checkPoints[3];
     ctx.beginPath();
@@ -294,13 +294,13 @@ function fRunner() {
     // console.log(time)
     // console.log(reader3_Timings[1])
     if (raceStartTime) {
-        if (firstRunner1 < checkPoints[1] * y + 9) {
+        if (firstRunner1 < checkPoints[1] * y + 9  && time <= reader1_Timings[0]) {
             firstRunner1 += 1;
             distanceFlag = true
             console.log("hello")
         }
         if (firstRunner1 < checkPoints[1] * y && time >= reader1_Timings[0]) {
-            firstRunner1 = checkPoints[1] * y
+            firstRunner1 = checkPoints[1] * y +9
             distanceFlag = false
         }
         if (firstRunner1 < checkPoints[2] * y + 9 && time >= reader1_Timings[0] && time <= reader2_Timings[0]) {
@@ -436,7 +436,7 @@ function minutestomillis(time) {
 var time = 0;
 function TimerFunction() {
     // console.log(Boolean(time >=reader3_Timings[participants.length - 2]))
-    if (time >= reader3_Timings[participants.length - 2]) { //change this
+    if (time >= reader3_Timings[participants.length - 2]) {
         clearInterval(render1)
         clearInterval(Timer);
         clearInterval(Timer1);
