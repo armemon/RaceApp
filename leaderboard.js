@@ -39,7 +39,7 @@ else {
     thirdRunner = 0;
     finish2 = 0
     finish3 = 0
-    speed = 1
+    speed = 10
 }
 var reader1_Timings = []
 var reader2_Timings = []
