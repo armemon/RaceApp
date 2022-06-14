@@ -62,7 +62,7 @@ if (window.sessionStorage.getItem("raceStartTime")) {
 function Time() {
     now = new Date().getTime();
     if (raceStartTime) {
-        time = (now - raceStartTime);
+        time = (now - raceStartTime)*speed;
     }
     else {
         time = 0
